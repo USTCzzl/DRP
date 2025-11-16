@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+comparison_run*.log
+batch_run.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Test files and folders
+test_*.py
+test_*/
+*_test.py
+
+# Intermediate results (keep only the final ones used in paper)
+# Uncomment patterns below if you want to exclude old experimental results
+# comparison_results_*/
+# experiment_*/
+# !comparison_results_20251117_000942/
+# !experiment_20251115_234205/
+
+# Temporary animations and results
+robot_animation_*.gif
+test_results_*.xlsx
+test_results_*.json
+
+# Temporary documentation
+*EXAMPLE*.txt
+*FEATURES*.txt
+
+# Paper and manuscript files
+RA_L2025/
+
+# Experimental data (too large, only keep website assets)
+comparison_results_*/
+experiment_*/
+
+# Core code (not needed for website-only repo)
+core/
+planning/
+visualization/
+*.py
+!push_to_github.sh
+config.yaml
+scenarios.py
+scenarios_paper.py
+scenarios_nature.py

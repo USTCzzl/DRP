@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double-Reactive Planning (DRP) - Experimental Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #fafafa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0C4B8E 0%, #1565C0 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: white;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: #f8f9fa;
+            color: #0C4B8E;
+        }
+
+        .nav-tab.active {
+            color: #0C4B8E;
+            border-bottom-color: #0C4B8E;
+            background: #f8f9ff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .card h2 {
+            color: #0C4B8E;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card h3 {
+            color: #444;
+            margin: 1.5rem 0 1rem;
+            font-size: 1.3rem;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .scenario-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-item:hover {
+            border-color: #0C4B8E;
+            transform: translateY(-2px);
+        }
+
+        .scenario-item h4 {
+            color: #0C4B8E;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .scenario-item img {
+            width: 100%;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .scenario-item .gif-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%;
+            overflow: hidden;
+            border-radius: 6px;
+            background: #000;
+        }
+
+        .scenario-item .gif-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            margin: 0;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #0C4B8E 0%, #1565C0 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box .value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+        }
+
+        .comparison-table th {
+            background: #0C4B8E;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            margin-top: 3rem;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: #0C4B8E;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Double-Reactive Planning (DRP)</h1>
+        <p>Multi-Robot Task Allocation with Capability Evolution and Environment Exploration</p>
+    </div>
+
+    <div class="container">
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('overview')">📊 Overview</button>
+            <button class="nav-tab" onclick="switchTab('exp1')">🎯 Experiment 1: DRP Performance</button>
+            <button class="nav-tab" onclick="switchTab('comparison')">⚖️ Comparative Evaluation</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="card">
+                <h2><span class="icon">📋</span> Project Overview</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; margin-top: 1rem;">
+                    The Double-Reactive Planning (DRP) framework addresses multi-robot task allocation under
+                    Linear Temporal Logic (LTL) specifications with two key innovations:
+                </p>
+                <ul style="margin: 1.5rem 0 1.5rem 2rem; font-size: 1.05rem; line-height: 2;">
+                    <li><strong>Capability Evolution:</strong> Robots acquire new capabilities through task completion</li>
+                    <li><strong>Environment Exploration:</strong> Frontier-based exploration discovers unknown task locations</li>
+                </ul>
+            </div>
+
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="label">Total Scenarios</div>
+                    <div class="value">22</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">DRP Success Rate</div>
+                    <div class="value">100%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Baseline Methods</div>
+                    <div class="value">3</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">🔬</span> Experimental Setup</h2>
+                <h3>Experiment 1: DRP Performance Validation</h3>
+                <p style="margin: 0.5rem 0 1rem;">
+                    <strong>10 diverse scenarios</strong> testing DRP under varying complexity levels
+                </p>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li>Environment sizes: 50×50 to 60×60 grids</li>
+                    <li>Obstacle densities: 17% to 25%</li>
+                    <li>Task counts: 5 to 8 tasks with dependency chains</li>
+                    <li>Metrics: Success rate, exploration coverage, execution efficiency</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem;">Comparative Evaluation</h3>
+                <p style="margin: 0.5rem 0 1rem;">
+                    <strong>12 controlled scenarios</strong> comparing DRP against baseline methods
+                </p>
+                <ul style="margin-left: 2rem; line-height: 1.8;">
+                    <li><strong>V-RTLMP:</strong> Vanilla reactive planning (no capability evolution)</li>
+                    <li><strong>DRP(fullmap):</strong> DRP with complete map knowledge (no exploration)</li>
+                    <li><strong>DRP:</strong> Full framework (capability evolution + exploration)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Experiment 1 Tab -->
+        <div id="exp1" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">🎯</span> Experiment 1: DRP Performance Validation</h2>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="label">Success Rate</div>
+                        <div class="value">100%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Avg. Exploration</div>
+                        <div class="value">92.8%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Step Range</div>
+                        <div class="value">103-336</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">📊</span> Performance Analysis</h3>
+                <div class="chart-container">
+                    <img src="assets/exp1/performance_charts/task_success_rate.png" alt="Task Success Rate" style="margin-bottom: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Task success rate across all 10 scenarios - 100% success achieved
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/exp1/performance_charts/exploration_and_steps.png" alt="Exploration and Steps" style="margin-bottom: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Exploration coverage and execution steps - Average 92.8% exploration rate
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/exp1/performance_charts/performance_summary.png" alt="Performance Summary">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Overall performance summary showing consistent high performance
+                    </p>
+                </div>
+            </div>
+
+            <div class="scenario-grid" id="exp1-scenarios"></div>
+        </div>
+
+        <!-- Comparison Tab -->
+        <div id="comparison" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">⚖️</span> Comparative Evaluation Against Baselines</h2>
+                <p style="font-size: 1.05rem; margin: 1rem 0;">
+                    Systematic comparison across 12 scenarios: 6 without capability evolution required (S1-S6)
+                    and 6 with mandatory evolution (S7-S12).
+                </p>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/comprehensive_comparison.png" alt="Performance Comparison">
+                    <p style="margin-top: 1rem; color: #666; font-style: italic;">
+                        Performance comparison: (a) task success rate, (b) execution steps
+                    </p>
+                </div>
+
+                <h3>Key Findings</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>S1-S6 Success</th>
+                            <th>S7-S12 Success</th>
+                            <th>Avg. Steps</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>V-RTLMP</strong></td>
+                            <td>100%</td>
+                            <td>22.7%</td>
+                            <td>624.5</td>
+                            <td><span class="badge badge-danger">Fails without evolution</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DRP(fullmap)</strong></td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>166.5</td>
+                            <td><span class="badge badge-success">Best efficiency</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>DRP</strong></td>
+                            <td>100%</td>
+                            <td>100%</td>
+                            <td>286.0</td>
+                            <td><span class="badge badge-success">Robust & practical</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #e7f3ff; border-left: 4px solid #0C4B8E; border-radius: 6px;">
+                    <h4 style="color: #0C4B8E; margin-bottom: 0.8rem;">💡 Key Insights</h4>
+                    <ul style="line-height: 1.8; margin-left: 1.5rem;">
+                        <li><strong>Capability evolution is necessary:</strong> V-RTLMP's complete failure in 50% of scenarios demonstrates that static capability assumptions are unrealistic</li>
+                        <li><strong>Exploration overhead justified:</strong> DRP's 71.8% additional steps compared to DRP(fullmap) is a necessary cost when prior maps are unavailable</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">📈</span> Detailed Performance Analysis</h3>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/method_comparison_bars.png" alt="Method Comparison">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Comprehensive method comparison across all metrics
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/success_rate_heatmap.png" alt="Success Rate Heatmap" style="margin-top: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Success rate heatmap - Clear performance degradation for V-RTLMP in S7-S12
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/execution_steps_comparison.png" alt="Execution Steps" style="margin-top: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Execution efficiency comparison across scenarios
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/grouped_comparison.png" alt="Grouped Analysis" style="margin-top: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Grouped analysis: Non-evolution (S1-S6) vs Evolution-required (S7-S12) scenarios
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/performance_summary.png" alt="Performance Summary" style="margin-top: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Overall performance summary across all methods
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/comparison/figures/correlation_analysis.png" alt="Correlation Analysis" style="margin-top: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Correlation analysis between different performance metrics
+                    </p>
+                </div>
+            </div>
+
+            <div class="scenario-grid" id="comparison-scenarios"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Double-Reactive Planning Framework</p>
+        <p style="margin-top: 0.5rem; color: #7f8c8d;">
+            Multi-Robot Task Allocation with Capability Evolution
+        </p>
+        <p style="margin-top: 1rem;">
+            <a href="https://github.com/yourusername/drp-framework" class="btn">
+                View on GitHub
+            </a>
+        </p>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // Load Experiment 1 scenarios
+        function loadExp1Scenarios() {
+            const scenarios = [
+                { id: 1, env: 'exp1_environment.png', gif: 'exp1.gif', tasks: 8 },
+                { id: 2, env: 'exp2_environment.png', gif: 'exp2.gif', tasks: 7 },
+                { id: 3, env: 'exp3_environment.png', gif: 'exp3.gif', tasks: 6 },
+                { id: 4, env: 'exp4_environment.png', gif: 'exp4.gif', tasks: 7 },
+                { id: 5, env: 'exp5_environment.png', gif: 'exp5.gif', tasks: 5 },
+                { id: 6, env: 'exp6_environment.png', gif: 'exp6.gif', tasks: 6 },
+                { id: 7, env: 'exp7_environment.png', gif: 'exp7.gif', tasks: 7 },
+                { id: 8, env: 'exp8_environment.png', gif: 'exp8.gif', tasks: 6 },
+                { id: 9, env: 'exp9_environment.png', gif: 'exp9.gif', tasks: 5 },
+                { id: 10, env: 'exp10_environment.png', gif: 'exp10.gif', tasks: 7 }
+            ];
+
+            const container = document.getElementById('exp1-scenarios');
+            scenarios.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'scenario-item';
+                div.innerHTML = `
+                    <h4>Experiment ${s.id}</h4>
+                    <img src="assets/exp1/environments/${s.env}" alt="Exp ${s.id} Environment">
+                    <div class="gif-container">
+                        <img src="assets/exp1/animations/${s.gif}" alt="Exp ${s.id} Animation">
+                    </div>
+                    <p style="margin-top: 0.8rem; color: #666;">
+                        <strong>${s.tasks} tasks</strong> with capability dependencies
+                    </p>
+                    <span class="badge badge-success">100% Success</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Load Comparison scenarios
+        function loadComparisonScenarios() {
+            const scenarios = [];
+            for (let i = 1; i <= 12; i++) {
+                scenarios.push({
+                    id: i,
+                    snapshot: `Scenario${i}_environment.png`,
+                    type: i <= 6 ? 'No evolution required' : 'Evolution required'
+                });
+            }
+
+            const container = document.getElementById('comparison-scenarios');
+            scenarios.forEach(s => {
+                const div = document.createElement('div');
+                div.className = 'scenario-item';
+                div.innerHTML = `
+                    <h4>Scenario ${s.id}</h4>
+                    <img src="assets/comparison/snapshots/${s.snapshot}" alt="Scenario ${s.id}">
+                    <p style="margin-top: 0.8rem; color: #666;">
+                        <strong>${s.type}</strong>
+                    </p>
+                    ${s.id <= 6
+                        ? '<span class="badge badge-success">All methods: 100%</span>'
+                        : '<span class="badge badge-warning">V-RTLMP fails</span> <span class="badge badge-success">DRP: 100%</span>'}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Initialize
+        loadExp1Scenarios();
+        loadComparisonScenarios();
+    </script>
+</body>
+</html>
