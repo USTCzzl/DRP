@@ -621,19 +621,21 @@
         }
 
         // LTL Formulas for Comparison Experiment (Scenario1-12)
+        // Scenarios 1-6: No evolution required (independent tasks)
+        // Scenarios 7-12: Evolution required (linear dependency chain)
         const comparisonLTL = {
-            1: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed)' },
-            2: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
-            3: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
-            4: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed)' },
-            5: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
-            6: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed)' },
-            7: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed)' },
-            8: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed)' },
-            9: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed)' },
-            10: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed) ∧ F(task_10_completed)' },
-            11: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed)' },
-            12: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed) ∧ F(task_10_completed) ∧ F(task_11_completed)' }
+            1: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3)' },
+            2: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3 ∧ F(task_4))' },
+            3: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3 ∧ F(task_4))' },
+            4: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3 ∧ F(task_4)) ∧ F(task_5)' },
+            5: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3 ∧ F(task_4))' },
+            6: { combined: 'F(task_1) ∧ F(task_2) ∧ F(task_3 ∧ F(task_4)) ∧ F(task_5) ∧ F(task_6)' },
+            7: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7)))))))' },
+            8: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7 ∧ F(task_8 ∧ F(task_9)))))))))' },
+            9: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7 ∧ F(task_8))))))))' },
+            10: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7 ∧ F(task_8 ∧ F(task_9 ∧ F(task_10))))))))))' },
+            11: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7 ∧ F(task_8 ∧ F(task_9)))))))))' },
+            12: { combined: 'F(task_1 ∧ F(task_2 ∧ F(task_3 ∧ F(task_4 ∧ F(task_5 ∧ F(task_6 ∧ F(task_7 ∧ F(task_8 ∧ F(task_9 ∧ F(task_10 ∧ F(task_11)))))))))))' }
         };
 
         // Load Comparison scenarios
