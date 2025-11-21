@@ -334,12 +334,13 @@
                 <h2><span class="icon">🔬</span> Experimental Setup</h2>
                 <h3>Experiment 1: DRP Performance Validation</h3>
                 <p style="margin: 0.5rem 0 1rem;">
-                    <strong>10 diverse scenarios</strong> testing DRP under varying complexity levels
+                    <strong>10 tiered scenarios</strong> with dramatically increasing complexity across 3 tiers
                 </p>
                 <ul style="margin-left: 2rem; line-height: 1.8;">
-                    <li>Environment sizes: 50×50 to 60×60 grids</li>
-                    <li>Obstacle densities: 17% to 25%</li>
-                    <li>Task counts: 5 to 8 tasks with dependency chains</li>
+                    <li><strong>Tier 1 (exp1-3):</strong> Single-robot capability evolution, 30×30 to 40×40, 10%-15% obstacles</li>
+                    <li><strong>Tier 2 (exp4-7):</strong> Dual-robot coordination, 45×45 to 60×60, 17%-22% obstacles</li>
+                    <li><strong>Tier 3 (exp8-10):</strong> High complexity with parallel tasks, 65×65 to 80×80, 25%-30% obstacles</li>
+                    <li>Task counts: 6-8 tasks with multi-level capability chains</li>
                     <li>Metrics: Success rate, exploration coverage, execution efficiency</li>
                 </ul>
 
@@ -376,25 +377,38 @@
             </div>
 
             <div class="card">
+                <h3><span class="icon">🎯</span> Scenario Complexity Progression</h3>
+                <div class="chart-container">
+                    <img src="assets/exp1/scenario_complexity_comparison.png" alt="Complexity Comparison" style="margin-bottom: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Environment complexity progression: 30×30/10% obstacles → 80×80/30% obstacles across 3 tiers
+                    </p>
+                </div>
+
+                <div class="chart-container">
+                    <img src="assets/exp1/scenario_complexity_table.png" alt="Complexity Table" style="margin-bottom: 2rem;">
+                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
+                        Detailed scenario complexity metrics showing progressive increase in environment size and obstacle density
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
                 <h3><span class="icon">📊</span> Performance Analysis</h3>
                 <div class="chart-container">
-                    <img src="assets/exp1/performance_charts/task_success_rate.png" alt="Task Success Rate" style="margin-bottom: 2rem;">
+                    <img src="assets/exp1/performance_charts/combined_performance.png" alt="Combined Performance Metrics" style="margin-bottom: 1rem;">
                     <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Task success rate across all 10 scenarios - 100% success achieved
+                        <strong>Comprehensive performance metrics across 10 tiered scenarios:</strong><br>
+                        (a) Task success rate: 100% correctness across all complexity tiers<br>
+                        (b) Exploration coverage: Task-driven adaptive exploration (96.2% → 41.7%)<br>
+                        (c) Execution steps: Sub-quadratic scaling with environment complexity (41 → 133 steps)
                     </p>
                 </div>
 
-                <div class="chart-container">
-                    <img src="assets/exp1/performance_charts/exploration_and_steps.png" alt="Exploration and Steps" style="margin-bottom: 2rem;">
-                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Exploration coverage and execution steps - Average 92.8% exploration rate
-                    </p>
-                </div>
-
-                <div class="chart-container">
+                <div class="chart-container" style="margin-top: 2rem;">
                     <img src="assets/exp1/performance_charts/performance_summary.png" alt="Performance Summary">
                     <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Overall performance summary showing consistent high performance
+                        Overall performance summary demonstrating robust performance across increasing complexity
                     </p>
                 </div>
             </div>
@@ -547,30 +561,34 @@
         // Load Experiment 1 scenarios
         function loadExp1Scenarios() {
             const scenarios = [
-                { id: 1, env: 'exp1_environment.png', gif: 'exp1.gif', tasks: 8 },
-                { id: 2, env: 'exp2_environment.png', gif: 'exp2.gif', tasks: 7 },
-                { id: 3, env: 'exp3_environment.png', gif: 'exp3.gif', tasks: 6 },
-                { id: 4, env: 'exp4_environment.png', gif: 'exp4.gif', tasks: 7 },
-                { id: 5, env: 'exp5_environment.png', gif: 'exp5.gif', tasks: 5 },
-                { id: 6, env: 'exp6_environment.png', gif: 'exp6.gif', tasks: 6 },
-                { id: 7, env: 'exp7_environment.png', gif: 'exp7.gif', tasks: 7 },
-                { id: 8, env: 'exp8_environment.png', gif: 'exp8.gif', tasks: 6 },
-                { id: 9, env: 'exp9_environment.png', gif: 'exp9.gif', tasks: 5 },
-                { id: 10, env: 'exp10_environment.png', gif: 'exp10.gif', tasks: 7 }
+                { id: 1, env: 'exp1_environment.png', gif: 'exp1.gif', tasks: 6, tier: 'Tier 1', size: '30×30', obstacles: '10%', desc: 'Single-robot 3-level chain' },
+                { id: 2, env: 'exp2_environment.png', gif: 'exp2.gif', tasks: 7, tier: 'Tier 1', size: '35×35', obstacles: '12%', desc: 'Single-robot 4-level chain' },
+                { id: 3, env: 'exp3_environment.png', gif: 'exp3.gif', tasks: 8, tier: 'Tier 1', size: '40×40', obstacles: '15%', desc: 'Single-robot 7-level chain' },
+                { id: 4, env: 'exp4_environment.png', gif: 'exp4.gif', tasks: 7, tier: 'Tier 2', size: '45×45', obstacles: '17%', desc: 'Dual-robot 2+2 level' },
+                { id: 5, env: 'exp5_environment.png', gif: 'exp5.gif', tasks: 8, tier: 'Tier 2', size: '50×50', obstacles: '18%', desc: 'Dual-robot 3+3 level' },
+                { id: 6, env: 'exp6_environment.png', gif: 'exp6.gif', tasks: 8, tier: 'Tier 2', size: '55×55', obstacles: '20%', desc: 'Dual-robot 4+3 level' },
+                { id: 7, env: 'exp7_environment.png', gif: 'exp7.gif', tasks: 8, tier: 'Tier 2', size: '60×60', obstacles: '22%', desc: 'Dual-robot 4+4 level' },
+                { id: 8, env: 'exp8_environment.png', gif: 'exp8.gif', tasks: 8, tier: 'Tier 3', size: '65×65', obstacles: '25%', desc: 'Dual+Parallel tasks' },
+                { id: 9, env: 'exp9_environment.png', gif: 'exp9.gif', tasks: 8, tier: 'Tier 3', size: '70×70', obstacles: '27%', desc: 'High density environment' },
+                { id: 10, env: 'exp10_environment.png', gif: 'exp10.gif', tasks: 8, tier: 'Tier 3', size: '80×80', obstacles: '30%', desc: 'Ultimate challenge' }
             ];
 
             const container = document.getElementById('exp1-scenarios');
             scenarios.forEach(s => {
                 const div = document.createElement('div');
                 div.className = 'scenario-item';
+                const tierColor = s.tier === 'Tier 1' ? '#D6EAF8' : (s.tier === 'Tier 2' ? '#D5F4E6' : '#FCF3CF');
                 div.innerHTML = `
                     <h4>Experiment ${s.id}</h4>
+                    <div style="background: ${tierColor}; padding: 0.5rem; border-radius: 4px; margin-bottom: 0.8rem;">
+                        <strong>${s.tier}</strong>: ${s.size}, ${s.obstacles} obstacles
+                    </div>
                     <img src="assets/exp1/environments/${s.env}" alt="Exp ${s.id} Environment">
                     <div class="gif-container">
                         <img src="assets/exp1/animations/${s.gif}" alt="Exp ${s.id} Animation">
                     </div>
                     <p style="margin-top: 0.8rem; color: #666;">
-                        <strong>${s.tasks} tasks</strong> with capability dependencies
+                        <strong>${s.tasks} tasks</strong> - ${s.desc}
                     </p>
                     <span class="badge badge-success">100% Success</span>
                 `;
