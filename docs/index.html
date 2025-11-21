@@ -558,6 +558,20 @@
             event.target.classList.add('active');
         }
 
+        // LTL Formulas Data (extracted from experiment results)
+        const scenarioLTL = {
+          1: { combined: 'F(scan_area) ∧ F(collect_keycard) ∧ F(unlock_gate) ∧ F(clear_path) ∧ F(repair_equipment) ∧ F(patrol_zone)' },
+          2: { combined: 'F(initial_scan) ∧ F(get_toolkit) ∧ F(manipulate_switch) ∧ F(unlock_vault) ∧ F(clear_debris) ∧ F(drill_access) ∧ F(patrol_perimeter)' },
+          3: { combined: 'F(beacon_scan) ∧ F(retrieve_keycard) ∧ F(open_gate) ∧ F(activate_console) ∧ F(remove_obstacle) ∧ F(drill_entry) ∧ F(repair_system) ∧ F(patrol_area)' },
+          4: { combined: 'F(aerial_survey) ∧ F(deep_scan) ∧ F(detect_target) ∧ F(collect_tool) ∧ F(manipulate_device) ∧ F(unlock_chamber) ∧ F(patrol_joint)' },
+          5: { combined: 'F(recon_flight) ∧ F(ground_search) ∧ F(locate_objective) ∧ F(acquire_passkey) ∧ F(use_passkey) ∧ F(unlock_facility) ∧ F(patrol_zone)' },
+          6: { combined: 'F(map_terrain) ∧ F(survey_underground) ∧ F(identify_resource) ∧ F(retrieve_keycard) ∧ F(insert_keycard) ∧ F(open_vault) ∧ F(clear_obstacles) ∧ F(patrol_route)' },
+          7: { combined: 'F(overhead_scan) ∧ F(deep_probe) ∧ F(pinpoint_target) ∧ F(fetch_toolkit) ∧ F(apply_toolkit) ∧ F(unlock_gate) ∧ F(remove_debris) ∧ F(patrol_dual)' },
+          8: { combined: 'F(aerial_recon) ∧ F(subsurface_scan) ∧ F(locate_target) ∧ F(get_key) ∧ F(use_key) ∧ F(open_door) ∧ F(clear_path) ∧ F(patrol_combined)' },
+          9: { combined: 'F(fly_survey) ∧ F(ground_analyze) ∧ F(find_objective) ∧ F(collect_access_card) ∧ F(activate_access) ∧ F(unlock_chamber) ∧ F(remove_blockage) ∧ F(patrol_full)' },
+          10: { combined: 'F(high_altitude_scan) ∧ F(ground_level_search) ∧ F(detect_goal) ∧ F(retrieve_credential) ∧ F(apply_credential) ∧ F(unlock_entrance) ∧ F(clear_debris) ∧ F(patrol_complete)' }
+        };
+
         // Load Experiment 1 scenarios
         function loadExp1Scenarios() {
             const scenarios = [
@@ -578,6 +592,8 @@
                 const div = document.createElement('div');
                 div.className = 'scenario-item';
                 const tierColor = s.tier === 'Tier 1' ? '#D6EAF8' : (s.tier === 'Tier 2' ? '#D5F4E6' : '#FCF3CF');
+                const ltlFormula = scenarioLTL[s.id].combined;
+
                 div.innerHTML = `
                     <h4>Experiment ${s.id}</h4>
                     <div style="background: ${tierColor}; padding: 0.5rem; border-radius: 4px; margin-bottom: 0.8rem;">
@@ -590,11 +606,35 @@
                     <p style="margin-top: 0.8rem; color: #666;">
                         <strong>${s.tasks} tasks</strong> - ${s.desc}
                     </p>
+                    <details style="margin: 0.8rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #007bff;">
+                        <summary style="cursor: pointer; font-weight: bold; color: #007bff; user-select: none;">
+                            📝 LTL Specification
+                        </summary>
+                        <div style="margin-top: 0.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #333; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;">
+                            ${ltlFormula}
+                        </div>
+                    </details>
                     <span class="badge badge-success">100% Success</span>
                 `;
                 container.appendChild(div);
             });
         }
+
+        // LTL Formulas for Comparison Experiment (Scenario1-12)
+        const comparisonLTL = {
+            1: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed)' },
+            2: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
+            3: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
+            4: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed)' },
+            5: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed)' },
+            6: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed)' },
+            7: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed)' },
+            8: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed)' },
+            9: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed)' },
+            10: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed) ∧ F(task_10_completed)' },
+            11: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed)' },
+            12: { combined: 'F(task_1_completed) ∧ F(task_2_completed) ∧ F(task_3_completed) ∧ F(task_4_completed) ∧ F(task_5_completed) ∧ F(task_6_completed) ∧ F(task_7_completed) ∧ F(task_8_completed) ∧ F(task_9_completed) ∧ F(task_10_completed) ∧ F(task_11_completed)' }
+        };
 
         // Load Comparison scenarios
         function loadComparisonScenarios() {
@@ -609,6 +649,7 @@
 
             const container = document.getElementById('comparison-scenarios');
             scenarios.forEach(s => {
+                const ltlFormula = comparisonLTL[s.id].combined;
                 const div = document.createElement('div');
                 div.className = 'scenario-item';
                 div.innerHTML = `
@@ -617,6 +658,14 @@
                     <p style="margin-top: 0.8rem; color: #666;">
                         <strong>${s.type}</strong>
                     </p>
+                    <details style="margin: 0.8rem 0; padding: 0.5rem; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #007bff;">
+                        <summary style="cursor: pointer; font-weight: bold; color: #007bff; user-select: none;">
+                            📝 LTL Specification
+                        </summary>
+                        <div style="margin-top: 0.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #333; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;">
+                            ${ltlFormula}
+                        </div>
+                    </details>
                     <div style="margin-top: 1rem;">
                         <p style="font-size: 0.9rem; color: #555; margin-bottom: 0.5rem;"><strong>V-RTLMP:</strong></p>
                         <div class="gif-container">
