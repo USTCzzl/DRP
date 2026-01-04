@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Double-Reactive Planning (DRP) - Experimental Results</title>
+    <title>Dual Reactive Planning (DRP) - Experimental Results</title>
     <style>
         * {
             margin: 0;
@@ -290,8 +290,8 @@
 </head>
 <body>
     <div class="header">
-        <h1>🤖 Double-Reactive Planning (DRP)</h1>
-        <p>Multi-Robot Task Allocation with Capability Evolution and Environment Exploration</p>
+        <h1>Dual Reactive Planning (DRP)</h1>
+        <p>Heterogeneous Robots with Evolving Capabilities in Unknown Environments</p>
     </div>
 
     <div class="container">
@@ -299,6 +299,7 @@
             <button class="nav-tab active" onclick="switchTab('overview')">📊 Overview</button>
             <button class="nav-tab" onclick="switchTab('exp1')">🎯 Experiment 1: DRP Performance</button>
             <button class="nav-tab" onclick="switchTab('comparison')">⚖️ Comparative Evaluation</button>
+            <button class="nav-tab" onclick="switchTab('gazebo')">🤖 Gazebo Simulation</button>
         </div>
 
         <!-- Overview Tab -->
@@ -481,23 +482,9 @@
                 <h3><span class="icon">📈</span> Detailed Performance Analysis</h3>
 
                 <div class="chart-container">
-                    <img src="assets/comparison/figures/method_comparison_bars.png" alt="Method Comparison">
-                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Comprehensive method comparison across all metrics
-                    </p>
-                </div>
-
-                <div class="chart-container">
-                    <img src="assets/comparison/figures/success_rate_heatmap.png" alt="Success Rate Heatmap" style="margin-top: 2rem;">
+                    <img src="assets/comparison/figures/success_rate_heatmap.png" alt="Success Rate Heatmap">
                     <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
                         Success rate heatmap - Clear performance degradation for V-RTLMP in S7-S12
-                    </p>
-                </div>
-
-                <div class="chart-container">
-                    <img src="assets/comparison/figures/execution_steps_comparison.png" alt="Execution Steps" style="margin-top: 2rem;">
-                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Execution efficiency comparison across scenarios
                     </p>
                 </div>
 
@@ -507,30 +494,130 @@
                         Grouped analysis: Non-evolution (S1-S6) vs Evolution-required (S7-S12) scenarios
                     </p>
                 </div>
-
-                <div class="chart-container">
-                    <img src="assets/comparison/figures/performance_summary.png" alt="Performance Summary" style="margin-top: 2rem;">
-                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Overall performance summary across all methods
-                    </p>
-                </div>
-
-                <div class="chart-container">
-                    <img src="assets/comparison/figures/correlation_analysis.png" alt="Correlation Analysis" style="margin-top: 2rem;">
-                    <p style="margin-top: 0.5rem; color: #666; font-style: italic;">
-                        Correlation analysis between different performance metrics
-                    </p>
-                </div>
             </div>
 
             <div class="scenario-grid" id="comparison-scenarios"></div>
         </div>
+
+        <!-- Gazebo Tab -->
+        <div id="gazebo" class="tab-content">
+            <div class="card">
+                <h2><span class="icon">🤖</span> Gazebo Simulation Validation</h2>
+                <p style="font-size: 1.1rem; line-height: 1.8; margin-top: 1rem;">
+                    High-fidelity 3D simulation of an underground post-collapse mining rescue mission with a heterogeneous team:
+                    a quadruped robot and a UAV collaborating to deliver water and medicine to six victims.
+                </p>
+
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="label">Robot Team</div>
+                        <div class="value">UAV + Quadruped</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Victims</div>
+                        <div class="value">6</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="label">Mission Success</div>
+                        <div class="value">100%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">🎬</span> Supplementary Video</h3>
+                <div class="chart-container">
+                    <iframe width="100%" height="500" src="https://www.youtube.com/embed/ArD-8sFmKA8"
+                        title="DRP Gazebo Simulation" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen style="border-radius: 8px; max-width: 900px;">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">🗺️</span> Underground Tunnel Environment</h3>
+                <div class="chart-container">
+                    <img src="assets/gazebo/fig1.png" alt="Gazebo Environment" style="max-width: 100%;">
+                    <p style="margin-top: 1rem; color: #666; font-style: italic;">
+                        Key stages of the Gazebo simulation: (a) Global view of the underground tunnel environment.
+                        (b) UAV exploration with occupancy grid mapping. (c) Collaborative exploration by the heterogeneous team.
+                        (d) Quadruped navigation based on elevation map.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">📋</span> Mission Specification</h3>
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <p style="font-family: 'Courier New', monospace; font-size: 1.1rem; text-align: center;">
+                        φ = ⋀<sub>i=1</sub><sup>3</sup> ◇π<sub>w<sub>i</sub></sub> ∧ ⋀<sub>j=1</sub><sup>3</sup> ◇π<sub>m<sub>j</sub></sub>
+                    </p>
+                </div>
+                <ul style="margin: 1.5rem 0 1.5rem 2rem; line-height: 2;">
+                    <li><strong>Water delivery tasks:</strong> π<sub>w1</sub>, π<sub>w2</sub>, π<sub>w3</sub> (require <code>deliver_water</code> capability)</li>
+                    <li><strong>Medicine delivery tasks:</strong> π<sub>m1</sub>, π<sub>m2</sub>, π<sub>m3</sub> (require <code>deliver_med</code> capability)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">🔄</span> Capability Evolution</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Robot</th>
+                            <th>Initial Capabilities</th>
+                            <th>Acquisition Location</th>
+                            <th>New Capability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Quadruped (r₁)</strong></td>
+                            <td>{traverse, deliver_water}</td>
+                            <td>Doctor location</td>
+                            <td><span class="badge badge-success">deliver_med</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>UAV (r₂)</strong></td>
+                            <td>{fly, deliver_med}</td>
+                            <td>Supply station</td>
+                            <td><span class="badge badge-success">deliver_water</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">📸</span> Execution Sequence</h3>
+                <div class="chart-container">
+                    <img src="assets/gazebo/fig6.png" alt="Execution Sequence" style="max-width: 100%;">
+                    <p style="margin-top: 1rem; color: #666; font-style: italic;">
+                        Execution sequence demonstrating capability evolution and dynamic task reallocation:
+                        (a) UAV acquires water delivery at supply station, (b) Quadruped delivers water,
+                        (c) UAV delivers medicine, (d) Quadruped acquires medicine delivery at doctor,
+                        (e-h) Both robots complete remaining tasks with reallocated assignments.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon">💡</span> Key Demonstration</h3>
+                <div style="padding: 1.5rem; background: #e7f3ff; border-left: 4px solid #0C4B8E; border-radius: 6px;">
+                    <ul style="line-height: 2; margin-left: 1.5rem;">
+                        <li><strong>Environment-reactive mechanism:</strong> Local path replanning triggered by environmental discovery optimizes routes while preserving task allocation</li>
+                        <li><strong>Capability-reactive mechanism:</strong> Global replanning triggered by capability evolution reallocates tasks based on proximity and new abilities</li>
+                        <li><strong>Hierarchical decoupling:</strong> Efficient adaptation to both types of changes ensures mission success in unknown environments</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="footer">
-        <p>© 2025 Double-Reactive Planning Framework</p>
+        <p>© 2025 Dual Reactive Planning (DRP)</p>
         <p style="margin-top: 0.5rem; color: #7f8c8d;">
-            Multi-Robot Task Allocation with Capability Evolution
+            Heterogeneous Robots with Evolving Capabilities in Unknown Environments
         </p>
         <p style="margin-top: 1rem;">
             <a href="https://github.com/yourusername/drp-framework" class="btn">
